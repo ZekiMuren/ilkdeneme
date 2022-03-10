@@ -75,9 +75,8 @@
 }
 	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"date.date","type":"ordinal","sort":null},"y":{"field":"count","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
 	barWidgetRenderer(ds, config, 'sv8LFXGj55k')
-	</script>
+	
 	------
-	<script>
 
 <div style="width: 500px; height: 500px; overflow-y: hidden;" id="sK1b5wHQhc0"></div>
 
@@ -143,9 +142,10 @@
 	barWidgetRenderer(ds, config, 'sK1b5wHQhc0')
 
 		
-	
+	</script>
 	------
 	
+	<script>
 <div style="width: 500px; height: 500px; overflow-y: hidden;" id="sqRgC5IhFG3"></div>
 
 	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!, $token: String!, $limit: Int, $offset: Int, $from: ISO8601DateTime, $till: ISO8601DateTime) {
