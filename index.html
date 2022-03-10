@@ -12,80 +12,24 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
  
 <script src="https://cdn.jsdelivr.net/gh/bitquery/widgets-runtime@v1.0/dataSource.js"></script>
-  <div>  <div class="row">
-    <div class="col-12 col-lg-6 mb-4">
-  <div class="card">
-    <div class="card-header">Token attributes</div>
-    <div class="card-body">
-      <div id="ethereum_token_attributes">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<script>
-    $( document ).ready(function() {
-
-        var query = new widgets.query(`
-            query($network: EthereumNetwork!, $address: String!) {
-              ethereum(network: $network) {
-                address(address: {is: $address}){
-
-                  annotation
-                  address
-
-                  smartContract {
-                    contractType
-                    currency{
-                      symbol
-                      name
-                      decimals
-                      tokenType
-                    }
-                  }
-                  balance
-                }
-              }
-            }`);
-
-
-
-        new widgets.table('#ethereum_token_attributes', query, 'ethereum.address', {
-            title: 'Token attributes',
-            renderData: function(data){
-                item = data[0];
-                return !item ? [] : [
-                    {name: 'Symbol', value: item.smartContract.currency.symbol},
-                    {name: 'Token Type', value: item.smartContract.currency.tokenType},
-                    {name: 'Name', value: item.smartContract.currency.name},
-                    {name: 'Number of Decimals', value: item.smartContract.currency.decimals},
-                    {name: 'Annotation', value: item.annotation}
-                ];
-            },
-            dataOptions: [
-                {
-                    title: 'Property',
-                    type: 'string-ellipsis',
-                    path: 'name',
-                    html_class: 'text-info font-weight-bold'
-                },
-                {
-                    title:  'Value',
-                    type: 'string-ellipsis',
-                    path: 'value',
-                    urlCallbackName: 'property_value_path'
-                },
-            ]
-        });
-
-        query.request({ network: 'avalanche',
-            address: '0x093783055f9047c2bff99c4e414501f8a147bc69'});
-
-    });
-
-
-
-</script>
-	
+{
+  "ethereum.address": [
+    {
+      "annotation": "",
+      "address": "0x093783055f9047c2bff99c4e414501f8a147bc69",
+      "smartContract": {
+        "contractType": "Token",
+        "currency": {
+          "symbol": "ALOT",
+          "name": "Dexalot Token",
+          "decimals": 18,
+          "tokenType": "ERC20"
+        }
+      },
+      "balance": 0
+    }
+  ]
+}
 		
   
   
