@@ -12,281 +12,79 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
  
 <script src="https://cdn.jsdelivr.net/gh/bitquery/widgets-runtime@v1.0/dataSource.js"></script>
-<div style="width: 500px; height: 500px; overflow-y: hidden;" id="sv8LFXGj55k"></div>
+  <div>  <div class="row">
+    <div class="col-12 col-lg-6 mb-4">
+  <div class="card">
+    <div class="card-header">Token attributes</div>
+    <div class="card-body">
+      <div id="ethereum_token_attributes">Loading...</div>
+    </div>
+  </div>
+</div>
+
 <script>
-	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!,
-                              $token: String!,
-                              $dateFormat: String!,
-                              $from: ISO8601DateTime,
-                              $till: ISO8601DateTime){
-                          ethereum(network: $network){
-                            transfers(currency: {is: $token}
-                            height:{gt: 0}
-                            amount: {gt: 0}
-                            date: {since: $from till: $till}){
-                              date{
-                                date(format: $dateFormat)
-                              }
-                              count: countBigInt(uniq: senders)
-                              median: amount(calculate: median)
-                            }
-                          }
-                        }`, {
-  "limit": 10,
-  "offset": 0,
-  "network": "avalanche",
-  "token": "0x093783055f9047c2bff99c4e414501f8a147bc69",
-  "from": "2022-02-08",
-  "till": "2022-12-31T23:59:59",
-  "dateFormat": "%Y-%m-%d"
-}, `ethereum.transfers`, 'BQYUcvdGOxC1VDTJpgf7hg79Jk0hsAUs')
-	async function barWidgetRenderer(ds, config, el) {
-	let values = undefined
-	if (!ds.values) {
-		const data = await ds.fetcher()
-		const json = await data.json()
-		values = ds.setupData(json)
-	} else {
-		values = ds.values
-	}
-	let cfg = {
-		$schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-		description: 'A simple bar chart with embedded data.',
-		width: "container",
-		height: "container",
-		mark: {"type": "bar", "tooltip": true},
-		selection: {
-			highlight: {
-				type: "single",
-				empty: "none",
-				on: "mouseover"
-			}
-		},
-		...config,
-		data: {
-			values
-		}
-	}
-	try {
-		vegaEmbed(`#${el}`, cfg, {actions: false})
-	} catch (error) {
-		console.log(error)
-	}
-}
-	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"date.date","type":"ordinal","sort":null},"y":{"field":"count","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
-	barWidgetRenderer(ds, config, 'sv8LFXGj55k')
-	</script>
-	------
+    $( document ).ready(function() {
 
-	<script>
-		
-<div style="width: 500px; height: 500px; overflow-y: hidden;" id="sK1b5wHQhc0"></div>
+        var query = new widgets.query(`
+            query($network: EthereumNetwork!, $address: String!) {
+              ethereum(network: $network) {
+                address(address: {is: $address}){
 
-	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!, $token: String!, $dateFormat: String!, $from: ISO8601DateTime, $till: ISO8601DateTime) {
-  ethereum(network: $network) {
-    transfers(
-      currency: {is: $token}
-      height: {gt: 0}
-      amount: {gt: 0}
-      date: {since: $from, till: $till}
-    ) {
-      date {
-        date(format: $dateFormat)
-      }
-      count: countBigInt(uniq: senders)
-      median: amount(calculate: median)
-    }
-  }
-}
-`, {
-  "limit": 10,
-  "offset": 0,
-  "network": "avalanche",
-  "token": "0x093783055f9047c2bff99c4e414501f8a147bc69",
-  "from": "2022-02-08",
-  "till": "2022-03-09T23:59:59",
-  "dateFormat": "%Y-%m-%d"
-}, `ethereum.transfers`, 'BQYUcvdGOxC1VDTJpgf7hg79Jk0hsAUs')
-	async function barWidgetRenderer(ds, config, el) {
-	let values = undefined
-	if (!ds.values) {
-		const data = await ds.fetcher()
-		const json = await data.json()
-		values = ds.setupData(json)
-	} else {
-		values = ds.values
-	}
-	let cfg = {
-		$schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-		description: 'A simple bar chart with embedded data.',
-		width: "container",
-		height: "container",
-		mark: {"type": "bar", "tooltip": true},
-		selection: {
-			highlight: {
-				type: "single",
-				empty: "none",
-				on: "mouseover"
-			}
-		},
-		...config,
-		data: {
-			values
-		}
-	}
-	try {
-		vegaEmbed(`#${el}`, cfg, {actions: false})
-	} catch (error) {
-		console.log(error)
-	}
-}
-	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"date.date","type":"ordinal","sort":null},"y":{"field":"count","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
-	barWidgetRenderer(ds, config, 'sK1b5wHQhc0')
+                  annotation
+                  address
 
-		
-	</script>
-	------
-	
-	<script>
-<div style="width: 500px; height: 500px; overflow-y: hidden;" id="sqRgC5IhFG3"></div>
+                  smartContract {
+                    contractType
+                    currency{
+                      symbol
+                      name
+                      decimals
+                      tokenType
+                    }
+                  }
+                  balance
+                }
+              }
+            }`);
 
-	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!, $token: String!, $limit: Int, $offset: Int, $from: ISO8601DateTime, $till: ISO8601DateTime) {
-  ethereum(network: $network) {
-    transfers(
-      currency: {is: $token}
-      date: {since: $from, till: $till}
-      height: {gt: 1}
-      amount: {gt: 0}
-      options: {desc: "amount", limit: $limit, offset: $offset}
-    ) {
-      receiver {
-        address
-        annotation
-      }
-      currency {
-        symbol
-      }
-      amount
-      count
-      sender_count: count(uniq: senders)
-      max_amount: maximum(of: amount, get: amount)
-      max_date: maximum(of: date)
-    }
-  }
-}
-`, {
-  "limit": 10,
-  "offset": 0,
-  "network": "avalanche",
-  "token": "0x093783055f9047c2bff99c4e414501f8a147bc69",
-  "from": "2022-02-08",
-  "till": "2022-03-09T23:59:59",
-  "dateFormat": "%Y-%m-%d"
-}, `ethereum.transfers`, 'BQYUcvdGOxC1VDTJpgf7hg79Jk0hsAUs')
-	async function barWidgetRenderer(ds, config, el) {
-	let values = undefined
-	if (!ds.values) {
-		const data = await ds.fetcher()
-		const json = await data.json()
-		values = ds.setupData(json)
-	} else {
-		values = ds.values
-	}
-	let cfg = {
-		$schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-		description: 'A simple bar chart with embedded data.',
-		width: "container",
-		height: "container",
-		mark: {"type": "bar", "tooltip": true},
-		selection: {
-			highlight: {
-				type: "single",
-				empty: "none",
-				on: "mouseover"
-			}
-		},
-		...config,
-		data: {
-			values
-		}
-	}
-	try {
-		vegaEmbed(`#${el}`, cfg, {actions: false})
-	} catch (error) {
-		console.log(error)
-	}
-}
-	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"receiver.address","type":"ordinal","sort":null},"y":{"field":"amount","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
-	barWidgetRenderer(ds, config, 'sqRgC5IhFG3')
+
+
+        new widgets.table('#ethereum_token_attributes', query, 'ethereum.address', {
+            title: 'Token attributes',
+            renderData: function(data){
+                item = data[0];
+                return !item ? [] : [
+                    {name: 'Symbol', value: item.smartContract.currency.symbol},
+                    {name: 'Token Type', value: item.smartContract.currency.tokenType},
+                    {name: 'Name', value: item.smartContract.currency.name},
+                    {name: 'Number of Decimals', value: item.smartContract.currency.decimals},
+                    {name: 'Annotation', value: item.annotation}
+                ];
+            },
+            dataOptions: [
+                {
+                    title: 'Property',
+                    type: 'string-ellipsis',
+                    path: 'name',
+                    html_class: 'text-info font-weight-bold'
+                },
+                {
+                    title:  'Value',
+                    type: 'string-ellipsis',
+                    path: 'value',
+                    urlCallbackName: 'property_value_path'
+                },
+            ]
+        });
+
+        query.request({ network: 'avalanche',
+            address: '0x093783055f9047c2bff99c4e414501f8a147bc69'});
+
+    });
+
+
+
 </script>
-		
-	------
-	
-
-<div style="width: 500px; height: 500px; overflow-y: hidden;" id="s3lyzUWhj5W"></div>
-<script>
-	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!, $token: String!, $dateFormat: String!, $from: ISO8601DateTime, $till: ISO8601DateTime) {
-  ethereum(network: $network) {
-    transfers(
-      currency: {is: $token}
-      height: {gt: 0}
-      amount: {gt: 0}
-      date: {since: $from, till: $till}
-    ) {
-      date {
-        date(format: $dateFormat)
-      }
-      count: countBigInt
-      amount
-    }
-  }
-}
-`, {
-  "limit": 10,
-  "offset": 0,
-  "network": "avalanche",
-  "token": "0x093783055f9047c2bff99c4e414501f8a147bc69",
-  "from": "2022-02-08",
-  "till": "2022-03-09T23:59:59",
-  "dateFormat": "%Y-%m-%d"
-}, `ethereum.transfers`, 'BQYUcvdGOxC1VDTJpgf7hg79Jk0hsAUs')
-	async function barWidgetRenderer(ds, config, el) {
-	let values = undefined
-	if (!ds.values) {
-		const data = await ds.fetcher()
-		const json = await data.json()
-		values = ds.setupData(json)
-	} else {
-		values = ds.values
-	}
-	let cfg = {
-		$schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-		description: 'A simple bar chart with embedded data.',
-		width: "container",
-		height: "container",
-		mark: {"type": "bar", "tooltip": true},
-		selection: {
-			highlight: {
-				type: "single",
-				empty: "none",
-				on: "mouseover"
-			}
-		},
-		...config,
-		data: {
-			values
-		}
-	}
-	try {
-		vegaEmbed(`#${el}`, cfg, {actions: false})
-	} catch (error) {
-		console.log(error)
-	}
-}
-	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"date.date","type":"ordinal","sort":null},"y":{"field":"count","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
-	barWidgetRenderer(ds, config, 's3lyzUWhj5W')
-</script>
-		
 	
 		
   
