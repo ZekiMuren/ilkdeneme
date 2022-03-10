@@ -37,161 +37,40 @@
   </div>
 </div>
 
-<script>
-    $( document ).ready(function() {
-
-        var query = new widgets.query(`
-            query($network: EthereumNetwork!, $address: String!) {
-              ethereum(network: $network) {
-                address(address: {is: $address}){
-
-                  annotation
-                  address
-
-                  smartContract {
-                    contractType
-                    currency{
-                      symbol
-                      name
-                      decimals
-                      tokenType
-                    }
-                  }
-                  balance
-                }
-              }
-            }`);
-
-
-
-        new widgets.table('#ethereum_token_attributes', query, 'ethereum.address', {
-            title: 'Token attributes',
-            renderData: function(data){
-                item = data[0];
-                return !item ? [] : [
-                    {name: 'Symbol', value: item.smartContract.currency.symbol},
-                    {name: 'Token Type', value: item.smartContract.currency.tokenType},
-                    {name: 'Name', value: item.smartContract.currency.name},
-                    {name: 'Number of Decimals', value: item.smartContract.currency.decimals},
-                    {name: 'Annotation', value: item.annotation}
-                ];
-            },
-            dataOptions: [
-                {
-                    title: 'Property',
-                    type: 'string-ellipsis',
-                    path: 'name',
-                    html_class: 'text-info font-weight-bold'
-                },
-                {
-                    title:  'Value',
-                    type: 'string-ellipsis',
-                    path: 'value',
-                    urlCallbackName: 'property_value_path'
-                },
-            ]
-        });
-
-        query.request({ network: 'avalanche',
-            address: '0x093783055f9047c2bff99c4e414501f8a147bc69'});
-
-    });
-
-
-
-</script>
-    <div class="col-12 col-lg-6 mb-4">
-  <div class="card">
-    <div class="card-header">Token transfer statistics</div>
-    <div class="card-body">
-      <div id="token_statistics">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<script>
-
-$( document ).ready(function() {
-
-
-    var query = new widgets.query(`query ($network: EthereumNetwork!,
-                              $token: String!,
-                              $from: ISO8601DateTime,
-                              $till: ISO8601DateTime){
-                          ethereum(network: $network){
-                            transfers(currency: {is: $token}
-                            amount: {gt: 0}
-                            date: {since: $from till: $till}
-                            ){
-
-                              currency{
-                                symbol
-                              }
-
-                              median: amount(calculate: median)
-                              average: amount(calculate: average)
-
-                              amount
-                              count
-
-                              days: count(uniq: dates)
-
-                              sender_count: count(uniq: senders)
-                              receiver_count: count(uniq: receivers)
-
-                              min_date:minimum(of: date)
-                              max_date:maximum(of: date)
-                            }
-                          }
-                        }`);
-
-
-
-    new widgets.table('#token_statistics', query, 'ethereum.transfers', {
-        title: 'Token transfer statistics',
-        renderData: function (data) {
-            item = data[0];
-            return !item ? [] : [
-                {name: 'Transfer Count', value: item.count},
-
-                {name: 'Uniq Senders', value: item.sender_count},
-                {name: 'Uniq Receivers', value:item.receiver_count},
-
-                {name: 'Total Amount', value: item.amount+' '+item.currency.symbol},
-
-                {name: 'Median Transfer Amount', value: item.median+' '+item.currency.symbol},
-                {name: 'Average Transfer Amount', value: item.average+' '+item.currency.symbol},
-
-
-                {name: 'First transfer date', value: item.min_date},
-                {name: 'Last transfer date', value: item.max_date},
-                {name: 'Days token transfered', value: item.days},
-
-            ];
-        },
-        dataOptions: [
-            {
-                title: 'Metric',
-                type: 'string-ellipsis',
-                path: 'name',
-                html_class: 'text-info font-weight-bold'
-            },
-            {
-                title: 'Value',
-                type: 'string-ellipsis',
-                path: 'value',
-                urlCallbackName: 'property_value_path'
-            },
-        ]
-    });
-
-    query.request({
-        network: 'avalanche',
-        token: '0x093783055f9047c2bff99c4e414501f8a147bc69'
-    });
-
-});
-</script>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-9cfx{font-family:Arial, Helvetica, sans-serif !important;font-size:14px;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-9cfx"><span style="font-weight:bold">Property</span></th>
+    <th class="tg-9cfx"><span style="font-weight:bold">Value</span></th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-9cfx">Symbol</td>
+    <td class="tg-9cfx">ALOT</td>
+  </tr>
+  <tr>
+    <td class="tg-9cfx">Token Type</td>
+    <td class="tg-9cfx">ERC20</td>
+  </tr>
+  <tr>
+    <td class="tg-9cfx">Name</td>
+    <td class="tg-9cfx">Dexalot Token</td>
+  </tr>
+  <tr>
+    <td class="tg-9cfx">Number of Decimals</td>
+    <td class="tg-9cfx">18</td>
+  </tr>
+</tbody>
+</table>
   </div>
 </div>
   
