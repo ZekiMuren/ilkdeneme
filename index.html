@@ -64,6 +64,155 @@
   </div>
 </div>
   
+ <br>
+
+<script src="https://cdn.jsdelivr.net/npm/vega@5.19.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
+ 
+<script src="https://cdn.jsdelivr.net/gh/bitquery/widgets-runtime@v1.0/dataSource.js"></script>
+<div style="width: 500px; height: 500px; overflow-y: hidden;" id="sPmX1jP1p1g"></div>
+	Number of ALOT Token Transfers
+<script>
+	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!, $token: String!, $dateFormat: String!, $from: ISO8601DateTime, $till: ISO8601DateTime) {
+  ethereum(network: $network) {
+    transfers(
+      currency: {is: $token}
+      height: {gt: 0}
+      amount: {gt: 0}
+      date: {since: $from, till: $till}
+    ) {
+      date {
+        date(format: $dateFormat)
+      }
+      count: countBigInt
+      amount
+    }
+  }
+}
+`, {
+  "limit": 10,
+  "offset": 0,
+  "network": "avalanche",
+  "token": "0x093783055f9047c2bff99c4e414501f8a147bc69",
+  "from": "2022-02-28",
+  "till": "2023-03-31T23:59:59",
+  "dateFormat": "%Y-%m-%d"
+}, `ethereum.transfers`, 'BQYUcvdGOxC1VDTJpgf7hg79Jk0hsAUs')
+	async function barWidgetRenderer(ds, config, el) {
+	let values = undefined
+	if (!ds.values) {
+		const data = await ds.fetcher()
+		const json = await data.json()
+		values = ds.setupData(json)
+	} else {
+		values = ds.values
+	}
+	let cfg = {
+		$schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+		description: 'A simple bar chart with embedded data.',
+		width: "container",
+		height: "container",
+		mark: {"type": "bar", "tooltip": true},
+		selection: {
+			highlight: {
+				type: "single",
+				empty: "none",
+				on: "mouseover"
+			}
+		},
+		...config,
+		data: {
+			values
+		}
+	}
+	try {
+		vegaEmbed(`#${el}`, cfg, {actions: false})
+	} catch (error) {
+		console.log(error)
+	}
+}
+	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"date.date","type":"ordinal","sort":null},"y":{"field":"count","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
+	barWidgetRenderer(ds, config, 'sPmX1jP1p1g')
+</script>
+		
+	
+	 <br>
+	
+	Amount of ALOT Token transferred per day
+	
+	
+<script src="https://cdn.jsdelivr.net/npm/vega@5.19.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
+ 
+<script src="https://cdn.jsdelivr.net/gh/bitquery/widgets-runtime@v1.0/dataSource.js"></script>
+<div style="width: 500px; height: 500px; overflow-y: hidden;" id="s7lEzZtC4GS"></div>
+<script>
+	let ds = new dataSourceWidget(`query ($network: EthereumNetwork!, $token: String!, $dateFormat: String!, $from: ISO8601DateTime, $till: ISO8601DateTime) {
+  ethereum(network: $network) {
+    transfers(
+      currency: {is: $token}
+      height: {gt: 0}
+      amount: {gt: 0}
+      date: {since: $from, till: $till}
+    ) {
+      date {
+        date(format: $dateFormat)
+      }
+      count: countBigInt
+      amount
+    }
+  }
+}
+`, {
+  "limit": 10,
+  "offset": 0,
+  "network": "avalanche",
+  "token": "0x093783055f9047c2bff99c4e414501f8a147bc69",
+  "from": "2022-02-28",
+  "till": "2023-03-31T23:59:59",
+  "dateFormat": "%Y-%m-%d"
+}, `ethereum.transfers`, 'BQYUcvdGOxC1VDTJpgf7hg79Jk0hsAUs')
+	async function barWidgetRenderer(ds, config, el) {
+	let values = undefined
+	if (!ds.values) {
+		const data = await ds.fetcher()
+		const json = await data.json()
+		values = ds.setupData(json)
+	} else {
+		values = ds.values
+	}
+	let cfg = {
+		$schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+		description: 'A simple bar chart with embedded data.',
+		width: "container",
+		height: "container",
+		mark: {"type": "bar", "tooltip": true},
+		selection: {
+			highlight: {
+				type: "single",
+				empty: "none",
+				on: "mouseover"
+			}
+		},
+		...config,
+		data: {
+			values
+		}
+	}
+	try {
+		vegaEmbed(`#${el}`, cfg, {actions: false})
+	} catch (error) {
+		console.log(error)
+	}
+}
+	const config = {"transform":[{"sample":1000}],"encoding":{"x":{"field":"date.date","type":"ordinal","sort":null},"y":{"field":"amount","type":"quantitative"},"stroke":{"condition":{"selection":"highlight","value":"#000"}}}}
+	barWidgetRenderer(ds, config, 's7lEzZtC4GS')
+</script>
+		
+	
+	
   
 </body>
 </html>
